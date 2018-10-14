@@ -38,6 +38,14 @@ export default class App extends Component {
   
   }
 
+  onPressDelete(index)  {
+    this.setState({
+      todos: this.state.todos.filter((t,i) => i !== index ), //indexとiが同じもの以外の配列を生成する
+    });
+    
+  }
+
+
   render() {
     console.log(this.state)
     return (
@@ -54,9 +62,12 @@ export default class App extends Component {
         >
           <Text style={styles.addButtonText} >ADD</Text>
         </TouchableOpacity>
-
-        <TodoList todos={this.state.todos} />  {/*TodoListにpropsでtodosを呼び出すため引数がいる*/}
-
+        {/*TodoListにpropsでtodosを呼び出すため引数がいる*/}
+        <TodoList 
+          todos={this.state.todos} 
+          onPressDelete={(index) => this.onPressDelete(index)}
+        
+        />  
       </View>
     );
   }
