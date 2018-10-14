@@ -13,7 +13,7 @@ import {Platform,
         View,
         TextInput, //textinput を入力可能にする
         TouchableOpacity,//ボタンのタッチした時にアニメーションが発生するコンポーネント
-
+        AsyncStorage,
       } from 'react-native';
 import TodoList from './TodoList'; 
 
@@ -22,6 +22,13 @@ export default class App extends Component {
     newTodo: '',
     todos: [],
   }
+
+  constructor(props){
+    super(props);//絶対に必要になる
+    this.loadTodos();
+  }
+
+
   //テキストフォームに変更が合った時に呼びださえれる
   onChangeText(newTodo){
     this.setState({ newTodo });
@@ -34,15 +41,32 @@ export default class App extends Component {
     this.setState({
       newTodo: '',
       todos : [newTodo, ...this.state.todos], //新しいnewTodoと前のnewTodoを合成した配列を作成
-    })
+    },() => this.storeTodos()); //setStateの第二引数はsetStateの処理が終わった瞬間に呼び出される
+
+
   
   }
 
   onPressDelete(index)  {
     this.setState({
       todos: this.state.todos.filter((t,i) => i !== index ), //indexとiが同じもの以外の配列を生成する
-    });
+    },() => this.storeTodos());
     
+  }
+
+  //保存のためのメソッド
+  storeTodos(){
+    const str = JSON.stringify(this.state.todos); //todosの配列をstringに変換
+    AsyncStorage.setItem('todos',str)//todosをkeyにしてstrを保存
+  }
+
+  //読み込みのためのメソッド
+  loadTodos(){
+    AsyncStorage.getItem('todos').then((str) => { //非同期処理でkeyが「todos」のデータを呼び出す
+      const todos = str ? JSON.parse(str) : []; //strが空の時に[]　データがあればJSON型の配列にして変換
+      this.setState({todos});
+    })
+
   }
 
 
