@@ -20,7 +20,7 @@ import {Platform,
 export default class App extends Component {
   state = {
     newTodo: '',
-    todos: {},
+    todos: [],
   }
   //テキストフォームに変更が合った時に呼びださえれる
   onChangeText(newTodo){
@@ -32,8 +32,8 @@ export default class App extends Component {
   
     const {newTodo} = this.state; //この書き方はstateの特定の変数を取り出すことができる
     this.setState({
-      newTodo: {},
-      todos : {newTodo, ...this.state.newTodo}, //新しいnewTodoと前のnewTodoを合成した配列を作成
+      newTodo: '',
+      todos : [newTodo, ...this.state.todos], //新しいnewTodoと前のnewTodoを合成した配列を作成
     })
   
   }
@@ -56,9 +56,15 @@ export default class App extends Component {
         </TouchableOpacity>
 
 
-        <ScrollView>
-
-
+        <ScrollView style={styles.scrollView}>
+          {
+            this.state.todos.map((todo,index) => ( //map配列を順番に取り出す
+              <View  key={todo+index} style={styles.todoContainer}>
+                {/*//keyで一意の指定をしないと警告が出る*/}
+                <Text>{todo}</Text>   
+              </View>
+            ))
+          }
         </ScrollView>
 
       </View>
@@ -87,9 +93,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', //太文字設定
   },
   scrollView : {
+    backgroundColor: '#DDD',
 
-    
-  }
+  },
+  todoContainer: {
+    backgroundColor: '#FFF',
+    padding: 18,
+  },
 
 
 });
