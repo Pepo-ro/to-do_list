@@ -13,9 +13,9 @@ import {Platform,
         View,
         TextInput, //textinput を入力可能にする
         TouchableOpacity,//ボタンのタッチした時にアニメーションが発生するコンポーネント
-        ScrollView,//Todoのデータが画面いっぱいになった時にスクロールができるようにする
-      } from 'react-native';
 
+      } from 'react-native';
+import TodoList from './TodoList'; 
 
 export default class App extends Component {
   state = {
@@ -55,17 +55,7 @@ export default class App extends Component {
           <Text style={styles.addButtonText} >ADD</Text>
         </TouchableOpacity>
 
-
-        <ScrollView style={styles.scrollView}>
-          {
-            this.state.todos.map((todo,index) => ( //map配列を順番に取り出す
-              <View  key={todo+index} style={styles.todoContainer}>
-                {/*//keyで一意の指定をしないと警告が出る*/}
-                <Text>{todo}</Text>   
-              </View>
-            ))
-          }
-        </ScrollView>
+        <TodoList todos={this.state.todos} />  {/*TodoListにpropsでtodosを呼び出すため引数がいる*/}
 
       </View>
     );
@@ -92,14 +82,5 @@ const styles = StyleSheet.create({
     textAlign: 'center', //位置設定 
     fontWeight: 'bold', //太文字設定
   },
-  scrollView : {
-    backgroundColor: '#DDD',
-
-  },
-  todoContainer: {
-    backgroundColor: '#FFF',
-    padding: 18,
-  },
-
 
 });
